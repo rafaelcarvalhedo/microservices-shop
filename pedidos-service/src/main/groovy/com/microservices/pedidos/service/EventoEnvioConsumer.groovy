@@ -1,8 +1,8 @@
 package com.microservices.pedidos.service
 
 import com.microservices.pedidos.model.Pedido
+import com.microservices.pedidos.model.EventoEnvio
 import com.microservices.pedidos.repository.PedidoRepository
-import com.microservices.envio.model.EventoEnvio
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service

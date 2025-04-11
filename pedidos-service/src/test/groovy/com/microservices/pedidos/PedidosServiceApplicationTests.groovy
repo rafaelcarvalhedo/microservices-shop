@@ -1,13 +1,15 @@
 package com.microservices.pedidos
 
-import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
+import spock.lang.Specification
 
 @SpringBootTest
-class PedidosServiceApplicationTests {
+@ActiveProfiles('test')
+class PedidosServiceApplicationTests extends Specification {
 
-	@Test
-	void contextLoads() {
-	}
-
+    def "context loads"() {
+        expect:
+        true
+    }
 }

@@ -1,9 +1,8 @@
 package com.microservices.pedidos.service
 
+import com.microservices.pedidos.model.EventoPagamento
 import com.microservices.pedidos.model.Pedido
 import com.microservices.pedidos.repository.PedidoRepository
-import com.microservices.pagamento.model.EventoPagamento
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -11,14 +10,17 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class EventoPagamentoConsumer {
 
-    @Autowired
-    PedidoRepository pedidoRepository
+    private final PedidoRepository pedidoRepository
 
-    @KafkaListener(topics = "pagamentos", groupId = "pedidos-group")
+    EventoPagamentoConsumer(PedidoRepository pedidoRepository) {
+        this.pedidoRepository = pedidoRepository
+    }
+
+    @KafkaListener(topics = 'pagamentos', groupId = 'pedidos-group')
     @Transactional
     void consumirEventoPagamento(EventoPagamento evento) {
         Pedido pedido = pedidoRepository.findById(evento.pedidoId)
-                .orElseThrow { new RuntimeException("Pedido não encontrado: ${evento.pedidoId}") }
+            .orElseThrow { new RuntimeException("Pedido não encontrado: ${evento.pedidoId}") }
 
         pedido.statusPagamento = evento.status
         pedido.ultimoPagamentoId = evento.id

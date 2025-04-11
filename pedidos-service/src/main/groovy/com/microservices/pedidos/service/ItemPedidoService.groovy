@@ -6,6 +6,7 @@ import com.microservices.pedidos.repository.ItemPedidoRepository
 import com.microservices.pedidos.repository.PedidoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ItemPedidoService {
@@ -18,6 +19,21 @@ class ItemPedidoService {
 
     @Autowired
     PedidoService pedidoService
+
+    @Transactional
+    ItemPedido criarItemPedido(ItemPedido itemPedido) {
+        return itemPedidoRepository.save(itemPedido)
+    }
+
+    @Transactional(readOnly = true)
+    List<ItemPedido> listarItensPorPedido(Long pedidoId) {
+        return itemPedidoRepository.findByPedidoId(pedidoId)
+    }
+
+    @Transactional
+    void deletarItemPedido(Long id) {
+        itemPedidoRepository.deleteById(id)
+    }
 
     ItemPedido adicionarItem(Long pedidoId, ItemPedido itemPedido) {
         def pedido = pedidoService.buscarPedidoPorId(pedidoId)
