@@ -53,13 +53,4 @@ jobs:
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/envio-service:latest
           cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Build and push frontend-service
-        uses: docker/build-push-action@v5
-        with:
-          context: ./frontend-service
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend-service:latest
-          cache-from: type=gha
           cache-to: type=gha,mode=max 
