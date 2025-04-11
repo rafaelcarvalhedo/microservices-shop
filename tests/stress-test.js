@@ -1,6 +1,8 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { randomIntBetween } from 'https://jslib.k6.io/k6-utils/1.2.0/index.js';
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
+import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 
 export const options = {
   stages: [
@@ -17,9 +19,20 @@ export const options = {
 };
 
 const BASE_URL = 'http://localhost:8080';
-const PEDIDOS_URL = `${BASE_URL}/api/pedidos`;
-const PAGAMENTOS_URL = `${BASE_URL}/api/pagamentos`;
-const ENVIOS_URL = `${BASE_URL}/api/envios`;
+const PEDIDOS_URL = BASE_URL + '/api/pedidos';
+const PAGAMENTOS_URL = BASE_URL + '/api/pagamentos';
+const ENVIOS_URL = BASE_URL + '/api/envios';
+
+// Função para formatar data no formato LocalDateTime
+function formatLocalDateTime(date) {
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const hours = String(date.getUTCHours()).padStart(2, '0');
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+}
 
 export default function () {
   // Cenário 1: Fluxo completo de sucesso
@@ -75,6 +88,7 @@ export default function () {
 }
 
 function criarPedido() {
+  const now = new Date();
   const payload = {
     clienteId: randomIntBetween(1, 1000),
     itens: [
@@ -83,11 +97,15 @@ function criarPedido() {
         quantidade: randomIntBetween(1, 5),
         valorUnitario: randomIntBetween(10, 100)
       }
-    ]
+    ],
+    dataCriacao: formatLocalDateTime(now)
   };
 
   const response = http.post(PEDIDOS_URL, JSON.stringify(payload), {
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
   });
 
   check(response, {
@@ -99,30 +117,40 @@ function criarPedido() {
 }
 
 function processarPagamento(pedidoId, status) {
+  const now = new Date();
   const payload = {
     pedidoId: pedidoId,
     status: status,
-    metodoPagamento: 'CARTAO_CREDITO'
+    metodoPagamento: 'CARTAO_CREDITO',
+    dataProcessamento: formatLocalDateTime(now)
   };
 
   const response = http.post(PAGAMENTOS_URL, JSON.stringify(payload), {
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
   });
 
   check(response, {
     'processamento de pagamento status 200': (r) => r.status === 200,
-    `pagamento ${status.toLowerCase()}`: (r) => JSON.parse(r.body).status === status,
+    'pagamento processado': (r) => JSON.parse(r.body).status === status,
   });
 }
 
 function iniciarEnvio(pedidoId) {
+  const now = new Date();
   const payload = {
     pedidoId: pedidoId,
-    status: 'EM_PREPARACAO'
+    status: 'EM_PREPARACAO',
+    dataInicioPreparacao: formatLocalDateTime(now)
   };
 
   const response = http.post(ENVIOS_URL, JSON.stringify(payload), {
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
   });
 
   check(response, {
@@ -132,13 +160,18 @@ function iniciarEnvio(pedidoId) {
 }
 
 function iniciarTransporte(pedidoId) {
+  const now = new Date();
   const payload = {
     pedidoId: pedidoId,
-    status: 'EM_TRANSITO'
+    status: 'EM_TRANSITO',
+    dataInicioTransporte: formatLocalDateTime(now)
   };
 
-  const response = http.put(`${ENVIOS_URL}/${pedidoId}`, JSON.stringify(payload), {
-    headers: { 'Content-Type': 'application/json' },
+  const response = http.put(ENVIOS_URL + '/' + pedidoId, JSON.stringify(payload), {
+    headers: { 
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
   });
 
   check(response, {
@@ -148,13 +181,18 @@ function iniciarTransporte(pedidoId) {
 }
 
 function finalizarEntrega(pedidoId) {
+  const now = new Date();
   const payload = {
     pedidoId: pedidoId,
-    status: 'ENTREGUE'
+    status: 'ENTREGUE',
+    dataEntrega: formatLocalDateTime(now)
   };
 
-  const response = http.put(`${ENVIOS_URL}/${pedidoId}`, JSON.stringify(payload), {
-    headers: { 'Content-Type': 'application/json' },
+  const response = http.put(ENVIOS_URL + '/' + pedidoId, JSON.stringify(payload), {
+    headers: { 
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
   });
 
   check(response, {
@@ -164,14 +202,19 @@ function finalizarEntrega(pedidoId) {
 }
 
 function cancelarEnvio(pedidoId) {
+  const now = new Date();
   const payload = {
     pedidoId: pedidoId,
     status: 'CANCELADO',
-    motivo: 'CANCELAMENTO_SOLICITADO'
+    motivo: 'CANCELAMENTO_SOLICITADO',
+    dataCancelamento: formatLocalDateTime(now)
   };
 
-  const response = http.put(`${ENVIOS_URL}/${pedidoId}`, JSON.stringify(payload), {
-    headers: { 'Content-Type': 'application/json' },
+  const response = http.put(ENVIOS_URL + '/' + pedidoId, JSON.stringify(payload), {
+    headers: { 
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
   });
 
   check(response, {
@@ -181,7 +224,11 @@ function cancelarEnvio(pedidoId) {
 }
 
 function verificarEstados(pedidoId) {
-  const response = http.get(`${PEDIDOS_URL}/${pedidoId}`);
+  const response = http.get(PEDIDOS_URL + '/' + pedidoId, {
+    headers: { 
+      'Accept': 'application/json'
+    },
+  });
 
   check(response, {
     'consulta de pedido status 200': (r) => r.status === 200,
@@ -213,4 +260,12 @@ function verificarEstados(pedidoId) {
       return false;
     },
   });
+}
+
+export function handleSummary(data) {
+  return {
+    "k6-results.html": htmlReport(data),
+    "k6-results.json": JSON.stringify(data),
+    stdout: textSummary(data, { indent: " ", enableColors: true }),
+  };
 } 
