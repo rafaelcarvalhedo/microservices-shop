@@ -3,12 +3,14 @@ package com.microservices.envio.service
 import com.microservices.envio.model.Envio
 import com.microservices.envio.model.EventoEnvio
 import com.microservices.envio.repository.EnvioRepository
+import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
+@CompileStatic
 class EnvioService {
 
     @Autowired

@@ -3,12 +3,14 @@ package com.microservices.pagamento.service
 import com.microservices.pagamento.model.EventoPagamento
 import com.microservices.pagamento.model.Pagamento
 import com.microservices.pagamento.repository.PagamentoRepository
+import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
+@CompileStatic
 class PagamentoService {
 
     @Autowired

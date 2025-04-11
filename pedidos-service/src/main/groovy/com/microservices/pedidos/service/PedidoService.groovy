@@ -2,17 +2,20 @@ package com.microservices.pedidos.service
 
 import com.microservices.pedidos.model.Pedido
 import com.microservices.pedidos.repository.PedidoRepository
+import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
+@CompileStatic
 class PedidoService {
 
     @Autowired
     PedidoRepository pedidoRepository
 
     Pedido criarPedido(Pedido pedido) {
-        pedido.dataCriacao = new Date()
+        pedido.dataCriacao = LocalDateTime.now()
         pedido.status = 'PENDENTE'
         calcularValorTotal(pedido)
         pedidoRepository.save(pedido)
@@ -47,6 +50,12 @@ class PedidoService {
     }
 
     private void calcularValorTotal(Pedido pedido) {
-        pedido.valorTotal = pedido.itens.sum { it.quantidade * it.precoUnitario } ?: 0.0
+        pedido.valorTotal = pedido.itens
+                .stream()
+                .mapToDouble(item ->
+                    item.getPrecoUnitario().multiply(
+                        BigDecimal.valueOf(item.getQuantidade())
+                    ).doubleValue()
+                ).sum()
     }
 } 

@@ -9,6 +9,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  IMAGE_TAG: ${{ github.sha }}
+  PROJECT_VERSION: 1.0.0
 
 jobs:
   build-and-push:
@@ -40,7 +42,10 @@ jobs:
         with:
           context: ./pedidos-service
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/pedidos-service:latest
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/pedidos-service:${{ env.IMAGE_TAG }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/pedidos-service:${{ env.PROJECT_VERSION }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/pedidos-service:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
           builder: ${{ steps.buildx.outputs.name }}
@@ -50,7 +55,10 @@ jobs:
         with:
           context: ./pagamento-service
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/pagamento-service:latest
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/pagamento-service:${{ env.IMAGE_TAG }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/pagamento-service:${{ env.PROJECT_VERSION }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/pagamento-service:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
           builder: ${{ steps.buildx.outputs.name }}
@@ -60,7 +68,10 @@ jobs:
         with:
           context: ./envio-service
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/envio-service:latest
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/envio-service:${{ env.IMAGE_TAG }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/envio-service:${{ env.PROJECT_VERSION }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/envio-service:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
           builder: ${{ steps.buildx.outputs.name }} 

@@ -4,11 +4,13 @@ import com.microservices.pedidos.model.ItemPedido
 import com.microservices.pedidos.model.Pedido
 import com.microservices.pedidos.repository.ItemPedidoRepository
 import com.microservices.pedidos.repository.PedidoRepository
+import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
+@CompileStatic
 class ItemPedidoService {
 
     @Autowired

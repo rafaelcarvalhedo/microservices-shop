@@ -1,10 +1,12 @@
 package com.microservices.pagamento.model
 
+import groovy.transform.CompileStatic
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
 @Table(name = "pagamentos")
+@CompileStatic
 class Pagamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

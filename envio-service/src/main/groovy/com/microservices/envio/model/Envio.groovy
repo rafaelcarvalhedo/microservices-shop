@@ -1,10 +1,12 @@
 package com.microservices.envio.model
 
+import groovy.transform.CompileStatic
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
 @Table(name = "envios")
+@CompileStatic
 class Envio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
