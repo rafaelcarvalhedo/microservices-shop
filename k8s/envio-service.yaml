@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: envio-service
+  labels:
+    app: envio-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: envio-service
+  template:
+    metadata:
+      labels:
+        app: envio-service
+    spec:
+      containers:
+      - name: envio-service
+        image: ghcr.io/rafaelsousa/projetos-spring/envio-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://postgres:5432/envio
+        - name: SPRING_DATASOURCE_USERNAME
+          value: postgres
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: postgres
+        - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+          value: kafka:9092
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: envio-service
+spec:
+  selector:
+    app: envio-service
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP 

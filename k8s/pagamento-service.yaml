@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pagamento-service
+  labels:
+    app: pagamento-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pagamento-service
+  template:
+    metadata:
+      labels:
+        app: pagamento-service
+    spec:
+      containers:
+      - name: pagamento-service
+        image: ghcr.io/rafaelsousa/projetos-spring/pagamento-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://postgres:5432/pagamento
+        - name: SPRING_DATASOURCE_USERNAME
+          value: postgres
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: postgres
+        - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+          value: kafka:9092
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pagamento-service
+spec:
+  selector:
+    app: pagamento-service
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP 
