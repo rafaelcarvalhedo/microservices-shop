@@ -1,0 +1,22 @@
+{
+    
+    "jdk.jdkhome": "/Users/rafaelsousa/.asdf/installs/java/zulu-21.40.17",
+    "jdk.project.jdkhome": "/Users/rafaelsousa/.asdf/installs/java/zulu-21.40.17",
+        "java.configuration.runtimes": [
+          {
+            "name": "JavaSE-17",
+            "path": "/Users/rafaelsousa/.asdf/installs/java/zulu-21.40.17",
+            "default": true
+          }
+        ]
+      ,
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable",
+    "files.associations": {
+        "*.groovy": "groovy"
+    },
+    "groovy.lint.enabled": true,
+    "groovy.lint.autoFix": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "naco-siren.gradle-language"
+} 
