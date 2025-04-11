@@ -49,7 +49,7 @@ class PedidoService {
         pedidoRepository.save(pedido)
     }
 
-    private void calcularValorTotal(Pedido pedido) {
+    void calcularValorTotal(Pedido pedido) {
         pedido.valorTotal = pedido.itens
                 .stream()
                 .mapToDouble(item ->
