@@ -6,7 +6,7 @@
       <GradleProjectSettings>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="$USER_HOME$/.asdf/installs/gradle/8.13" />
+        <option name="gradleHome" value="$PROJECT_DIR$/../.asdf/installs/gradle/8.13" />
         <option name="gradleJvm" value="azul-21" />
         <option name="modules">
           <set>
@@ -14,6 +14,15 @@
             <option value="$PROJECT_DIR$/envio-service" />
             <option value="$PROJECT_DIR$/pagamento-service" />
             <option value="$PROJECT_DIR$/pedidos-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/commoms" />
+        <option name="gradleJvm" value="azul-21" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/commoms" />
           </set>
         </option>
       </GradleProjectSettings>

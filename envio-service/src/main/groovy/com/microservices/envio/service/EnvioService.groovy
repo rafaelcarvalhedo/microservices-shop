@@ -1,7 +1,8 @@
 package com.microservices.envio.service
 
+import com.microservices.commoms.kafka.evento.EventoEnvio
 import com.microservices.envio.model.Envio
-import com.microservices.envio.model.EventoEnvio
+
 import com.microservices.envio.repository.EnvioRepository
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired

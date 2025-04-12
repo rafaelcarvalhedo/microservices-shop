@@ -1,4 +1,4 @@
-package com.microservices.pagamento.model
+package com.microservices.commoms.kafka.evento
 
 import java.time.LocalDateTime
 

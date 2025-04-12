@@ -23,15 +23,15 @@ services:
     container_name: kafka
     ports:
       - "9092:9092"
-      - "9093:9093"
+      - "29092:29092"
     environment:
       KAFKA_ENABLE_KRAFT: "yes"
       KAFKA_CFG_PROCESS_ROLES: "broker,controller"
       KAFKA_CFG_NODE_ID: "1"
       KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
-      KAFKA_CFG_LISTENERS: "PLAINTEXT://:9092,CONTROLLER://:9093"
-      KAFKA_CFG_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092"
-      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
+      KAFKA_CFG_LISTENERS: "PLAINTEXT://:9092,CONTROLLER://:9093,PLAINTEXT_EXTERNAL://:29092"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092,PLAINTEXT_EXTERNAL://localhost:29092"
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_EXTERNAL:PLAINTEXT"
       KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
       KAFKA_CFG_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
@@ -133,10 +133,22 @@ services:
     networks:
       - microservices-network
 
+  redpanda-console:
+    image: docker.redpanda.com/redpandadata/console:latest
+    container_name: redpanda-console
+    depends_on:
+      - kafka
+    ports:
+      - "8085:8080"
+    environment:
+      - KAFKA_BROKERS=kafka:9092
+    networks:
+      - microservices-network
 networks:
   microservices-network:
     driver: bridge
 
 volumes:
   postgres_data:
-  kafka_data: 
+  kafka_data:
+  redpanda-data: 

@@ -1,5 +1,6 @@
 package com.microservices.pedidos.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import java.math.BigDecimal
 
@@ -12,6 +13,7 @@ class ItemPedido {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pedido_id", nullable = false)
+    @JsonIgnore
     Pedido pedido
 
     @Column(nullable = false)

@@ -1,5 +1,3 @@
 rootProject.name = 'microservices'
 
-include 'pedidos-service'
-include 'pagamento-service'
-include 'envio-service' 
+include 'pedidos-service', 'pagamento-service', 'envio-service', 'commoms'

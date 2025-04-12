@@ -21,6 +21,42 @@ const PEDIDOS_URL = BASE_URL + '/api/pedidos';
 const PAGAMENTOS_URL = BASE_URL + '/api/pagamentos';
 const ENVIOS_URL = BASE_URL + '/api/envios';
 
+
+
+
+class ErrorHandler {
+  // Instruct the error handler how to log errors
+  constructor(logErrorDetails) {
+    this.logErrorDetails = logErrorDetails;
+  }
+
+  // Logs response error details if isError is true.
+  logError(isError, res, tags = {}) {
+    if (!isError) return;
+
+    // the Traceparent header is a W3C Trace Context
+    const traceparentHeader = res.request.headers['Traceparent'];
+
+    // Add any other useful information
+    const errorData = Object.assign(
+        {
+          url: res.url,
+          status: res.status,
+          body : res.body,
+          error_code: res.error_code,
+          traceparent: traceparentHeader && traceparentHeader.toString(),
+        },
+        tags
+    );
+    this.logErrorDetails(errorData);
+  }
+}
+
+const errorHandler = new ErrorHandler((error) => {
+  console.error(error);
+});
+
+
 export default function () {
   // Cenário 1: Fluxo completo de sucesso
   const pedido = criarPedido();
@@ -76,27 +112,57 @@ export default function () {
 
 function criarPedido() {
   const payload = {
-    clienteId: randomIntBetween(1, 1000),
+    clienteId: `CLI-${__VU}-${__ITER}`,
     itens: [
       {
-        produtoId: randomIntBetween(1, 100),
-        quantidade: randomIntBetween(1, 5),
-        valorUnitario: randomIntBetween(10, 100)
+        produtoId: `PROD-${__VU}-${__ITER}-1`,
+        quantidade: Math.floor(Math.random() * 5) + 1,
+        precoUnitario: (Math.random() * 100).toFixed(2)
       }
     ],
-    dataCriacao: new Date().toISOString()
+    valorTotal: (Math.random() * 1000).toFixed(2),
+    status: 'PENDENTE',
+    statusPagamento: 'PENDENTE',
+    dataCriacao: new Date().toISOString(),
+    enderecoEntrega: {
+      rua: `Rua Teste ${__VU}`,
+      numero: Math.floor(Math.random() * 1000),
+      complemento: `Apto ${__VU}`,
+      bairro: 'Centro',
+      cidade: 'São Paulo',
+      estado: 'SP',
+      cep: '00000-000'
+    }
   };
 
   const response = http.post(PEDIDOS_URL, JSON.stringify(payload), {
     headers: { 'Content-Type': 'application/json' },
   });
 
-  check(response, {
-    'criação do pedido status 200': (r) => r.status === 200,
-    'pedido criado com status PENDENTE': (r) => JSON.parse(r.body).status === 'PENDENTE',
+  console.log('Response status:', response.status);
+  console.log('Response body:', response.body);
+
+  let checkStatus = check(response, {
+    'criação do pedido status 201': (r) => r.status === 201,
+    'pedido criado com status PENDENTE': (r) => {
+      try {
+        const body = JSON.parse(r.body);
+        return body.status === 'PENDENTE';
+      } catch (e) {
+        console.error('Erro ao parsear resposta:', e);
+        return false;
+      }
+    },
   });
 
-  return JSON.parse(response.body);
+  errorHandler.logError(!checkStatus, response);
+
+  try {
+    return JSON.parse(response.body);
+  } catch (e) {
+    console.error('Erro ao parsear resposta:', e);
+    return null;
+  }
 }
 
 function processarPagamento(pedidoId, status) {
@@ -219,4 +285,5 @@ function verificarEstados(pedidoId) {
       return false;
     },
   });
-} 
+}
+
