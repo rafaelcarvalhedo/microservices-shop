@@ -81,7 +81,7 @@ jobs:
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/envio-service:${{ steps.get_version.outputs.version || 'latest' }}
-            ${{ env.IMAGE_NAME }}/envio-service:${{ env.IMAGE_TAG }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/envio-service:${{ env.IMAGE_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           builder: ${{ steps.buildx.outputs.name }} 
