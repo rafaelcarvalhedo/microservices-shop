@@ -17,6 +17,9 @@ class PedidoService {
     Pedido criarPedido(Pedido pedido) {
         pedido.dataCriacao = LocalDateTime.now()
         pedido.status = 'PENDENTE'
+        pedido.itens.forEach {
+            it.setPedido(pedido)
+        }
         calcularValorTotal(pedido)
         pedidoRepository.save(pedido)
     }

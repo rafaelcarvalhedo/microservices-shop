@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 @Table(name = "pedidos")
 class Pedido {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id
 
     @Column(nullable = false)
@@ -28,8 +28,9 @@ class Pedido {
     @Column
     Long ultimoPagamentoId
 
+    @Enumerated(EnumType.STRING)
     @Column
-    String statusEnvio
+    StatusEnvio statusEnvio
 
     @Column
     Long ultimoEnvioId

@@ -7,7 +7,7 @@ import java.math.BigDecimal
 @Table(name = "itens_pedido")
 class ItemPedido {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id
 
     @ManyToOne(fetch = FetchType.LAZY)
