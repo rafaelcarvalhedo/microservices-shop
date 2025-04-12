@@ -92,7 +92,7 @@ function criarPedido() {
   });
 
   check(response, {
-    'criação do pedido status 201': (r) => r.status === 201,
+    'criação do pedido status 200': (r) => r.status === 200,
     'pedido criado com status PENDENTE': (r) => JSON.parse(r.body).status === 'PENDENTE',
   });
 
