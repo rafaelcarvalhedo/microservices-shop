@@ -1,4 +1,4 @@
-package com.microservices.commoms.kafka.evento
+package com.microservices.commons
 
 import java.time.LocalDateTime
 

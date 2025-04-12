@@ -21,7 +21,7 @@ class PedidoService {
             it.setPedido(pedido)
         }
         calcularValorTotal(pedido)
-        pedidoRepository.save(pedido)
+       return  pedidoRepository.save(pedido)
     }
 
     Pedido buscarPedidoPorId(Long id) {

@@ -1,6 +1,6 @@
 package com.microservices.pedidos.service
 
-import com.microservices.commoms.kafka.evento.EventoEnvio
+import com.microservices.commons.EventoEnvio
 import com.microservices.pedidos.model.Pedido
 import com.microservices.pedidos.repository.PedidoRepository
 import org.springframework.beans.factory.annotation.Autowired

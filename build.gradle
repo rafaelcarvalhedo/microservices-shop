@@ -29,6 +29,6 @@ subprojects {
     }
 }
 
-configure(subprojects.findAll { it.name != 'common-service' }) {
+configure(subprojects.findAll { it.name != 'commons' }) {
     apply plugin: 'org.springframework.boot'
 } 

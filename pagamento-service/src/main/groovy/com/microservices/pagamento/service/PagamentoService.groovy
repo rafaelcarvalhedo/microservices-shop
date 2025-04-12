@@ -1,6 +1,6 @@
 package com.microservices.pagamento.service
 
-import EventoPagamento
+import br.com.microservices.commons.EventoPagamento
 import com.microservices.pagamento.model.Pagamento
 import com.microservices.pagamento.repository.PagamentoRepository
 import groovy.transform.CompileStatic

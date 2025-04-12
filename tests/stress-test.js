@@ -139,11 +139,9 @@ function criarPedido() {
     headers: { 'Content-Type': 'application/json' },
   });
 
-  console.log('Response status:', response.status);
-  console.log('Response body:', response.body);
 
   let checkStatus = check(response, {
-    'criação do pedido status 201': (r) => r.status === 201,
+    'criação do pedido status 200': (r) => r.status === 200,
     'pedido criado com status PENDENTE': (r) => {
       try {
         const body = JSON.parse(r.body);

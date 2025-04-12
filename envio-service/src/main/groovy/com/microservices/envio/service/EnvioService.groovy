@@ -1,6 +1,6 @@
 package com.microservices.envio.service
 
-import com.microservices.commoms.kafka.evento.EventoEnvio
+import com.microservices.commons.EventoEnvio
 import com.microservices.envio.model.Envio
 
 import com.microservices.envio.repository.EnvioRepository

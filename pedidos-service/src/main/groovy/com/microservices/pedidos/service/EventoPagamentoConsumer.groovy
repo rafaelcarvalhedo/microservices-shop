@@ -1,6 +1,6 @@
 package com.microservices.pedidos.service
 
-import com.microservices.commoms.kafka.evento.EventoPagamento
+import com.microservices.commons.EventoPagamento
 import com.microservices.pedidos.model.Pedido
 import com.microservices.pedidos.repository.PedidoRepository
 import org.springframework.kafka.annotation.KafkaListener
