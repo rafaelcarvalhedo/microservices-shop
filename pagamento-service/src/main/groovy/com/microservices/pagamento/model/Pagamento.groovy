@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 @CompileStatic
 class Pagamento {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id
 
     @Column(nullable = false)

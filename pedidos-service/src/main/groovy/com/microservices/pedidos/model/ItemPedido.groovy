@@ -7,7 +7,7 @@ import java.math.BigDecimal
 @Table(name = "itens_pedido")
 class ItemPedido {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -18,10 +18,10 @@ class ItemPedido {
     String produtoId
 
     @Column(nullable = false)
-    Integer quantidade
+    Integer quantidade = 0
 
     @Column(nullable = false)
-    BigDecimal precoUnitario
+    BigDecimal precoUnitario = BigDecimal.ZERO
 
     @PrePersist
     @PreUpdate
